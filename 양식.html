@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>텍스트 애니메이션</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            display: flex;
+        }
+
+        .left {
+            width: 40%; 
+            height: 100vh; 
+            background-image: url("images/얼비\ 반전.png"); /* 처음 배경 이미지 */
+            background-size: contain; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            transition: background-image 1s ease; 
+        }
+
+        
+        .right {
+            width: 60%; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #text-display {
+            font-size: 40px; 
+            font-weight: 900; 
+            min-height: 50px;
+            display: inline-block;
+            white-space: pre-wrap;
+            color: #1D3557;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5); 
+            letter-spacing: 2px; 
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; 
+        }
+
+        button {
+            font-size: 40px; 
+            font-weight: 900; 
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+
+        #answer-btn {
+            margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="left"></div>
+
+    <div class="right">
+        <div id="text-display"></div>
+        <br>
+
+        <div class="button-container">
+            <button onclick="startAnimation()" style="color: cornsilk; background-color: skyblue;">시작</button>
+            <button onclick="stopAnimation()"  style="color: cornsilk; background-color: salmon;">중단</button>
+            <button onclick="nextSection()"  style="color: cornsilk; background-color: greenyellow;">다음</button>
+        </div>
+
+        <button id="answer-btn" onclick="showAnswer()" style="color: cornsilk; background-color: plum;">정답</button> 
+
+    </div>
+    <!-- 밑에 유튜브 영상(노래)나오게 할려면 넣어야함
+    <div id="youtube-container"></div>
+    -->
+
+    <script>
+        let text = "나는 사과가 좋아"; // 문제
+        let answer = "정답은 사과이다"; // 정답
+        let index = 0;
+        let interval;
+        let stopIndex = 0;
+        let isRunning = false;
+
+        function startAnimation() {
+            if (isRunning || index >= text.length) return;
+            isRunning = true;
+            interval = setInterval(() => {
+                if (index < text.length) {
+                    document.getElementById("text-display").innerText += text[index];
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    isRunning = false;
+                }
+            }, 300); // 0.3초마다 글자 추가, 시간조절
+        }
+
+        function stopAnimation() {
+            clearInterval(interval);
+            stopIndex = index; 
+            isRunning = false;
+        }
+
+        function nextSection() {
+            document.getElementById("text-display").innerText = ""; 
+            index = stopIndex; 
+        }
+
+        function showAnswer() {
+            document.getElementById("text-display").innerText = text + "\n" + "\n" +  "\n" + answer;
+
+            document.querySelector(".left").style.backgroundImage = "url('images/실험.jpg')"; 
+
+            // 유튜브 영상(노래만) 하면 좋은데 임베드 재생 막아놓은 곳이 많아서 안하는걸 추천
+            /*
+            const youtubeContainer = document.getElementById("youtube-container");
+            youtubeContainer.innerHTML = ''; // 기존 영상 삭제 (중복 방지)
+
+            const iframe = document.createElement("iframe");
+            iframe.width = "0";
+            iframe.height = "0";
+            iframe.src = "https://www.youtube.com/embed/Od2m_F33e88?start=77&autoplay=1"; // 임베드 링크로 넣어야함
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+
+            youtubeContainer.appendChild(iframe);
+            */
+            }
+    </script>
+</body>
+</html>
